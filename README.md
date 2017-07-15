@@ -1,7 +1,7 @@
 # DataPartition
 基于mycat分片算法，对未分片数据进行分片
 ### 适用对象
-使用mycat做为数据库中间件或使用mycat分片算法的数据切分需求
+使用mycat做为数据库中间件或使用mycat分片算法的应用系统的数据切分需求
 ### 支持数据库
 + mysql
 + oracle
