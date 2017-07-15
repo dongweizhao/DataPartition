@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+    <context:component-scan base-package="org.pub.DataPartitoin.*"/>
+    <context:property-placeholder location="classpath:cfg.properties"/>
+    <bean id="gnrParams" class="org.pub.DataPartitoin.util.GnrParams">
+        <property name="settings">
+            <map>
+                <entry key="maxResults" value="${maxResults}"/>
+                <entry key="path" value="${generatePath}"/>
+                <entry key="separator" value="${separator}"/>
+                <entry key="dialect" value="${dialect}"/>
+                <entry key="dataCount" value="${node.count}"></entry>
+                <entry key="nullValue" value="${dyn.nullValue}"></entry>
+            </map>
+        </property>
+        <property name="tables">
+            <map>
+                <!--<entry key="t_cap_user_auth_info" value="user_id"/>-->
+                <!--<entry key="t_cap_channel_user_stat_info" value="user_id"/>-->
+                <entry key="eadept" value="deptid"></entry>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="ruleAlgorithm" class="io.mycat.route.function.PartitionByMurmurHash" init-method="init">
+        <property name="seed" value="0"/>
+        <!-- 默认是0 -->
+        <property name="count" value="${node.count}"/>
+        <!-- 要分片的数据库节点数量，必须指定，否则没法分片 -->
+        <property name="virtualBucketTimes" value="160"/>
+        <!-- 一个实际的数据库节点被映射为这么多虚拟节点，默认是160倍，也就是虚拟节点数是物理节点数的160倍 -->
+        <!-- <property name="weightMapFile">weightMapFile</property> 节点的权重，没有指定权重的节点默认是1。以properties文件的格式填写，以从0开始到count-1的整数值也就是节点索引为key，以节点权重值为值。所有权重值必须是正整数，否则以1代替 -->
+        <!-- <property name="bucketMapPath">/etc/mycat/bucketMapPath</property>
+            用于测试时观察各物理节点与虚拟节点的分布情况，如果指定了这个属性，会把虚拟节点的murmur hash值与物理节点的映射按行输出到这个文件，没有默认值，如果不指定，就不会输出任何东西 -->
+    </bean>
+
+    <!--<bean id="ruleAlgorithm" class="io.mycat.route.function.PartitionByLong" init-method="init">-->
+        <!--<property name="partitionCount" value="${node.count}"/>-->
+        <!--<property name="partitionLength" value="32"></property>-->
+    <!--</bean>-->
+
+
+    <!--中间库数据源-->
+    <bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="url" value="${datasource.url}"/>
+        <property name="username" value="${datasource.username}"/>
+        <property name="password" value="${datasource.password}"/>
+        <!-- 初始化连接大小 -->
+        <property name="initialSize" value="1"/>
+        <!-- 连接池最大使用连接数量 -->
+        <property name="maxActive" value="20"/>
+        <!-- 连接池最大空闲 -->
+        <property name="maxIdle" value="20"/>
+        <!-- 连接池最小空闲 -->
+        <property name="minIdle" value="0"/>
+        <!-- 获取连接最大等待时间 -->
+        <property name="maxWait" value="300000"/>
+        <!--
+        <property name="poolPreparedStatements" value="true" />
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="33" />
+        -->
+        <!--<property name="validationQuery" value="SELECT 'x'"/>-->
+        <property name="validationQuery" value="select 1 from dual"/>
+
+        <property name="testOnBorrow" value="false"/>
+        <property name="testOnReturn" value="false"/>
+        <property name="testWhileIdle" value="true"/>
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="25200000"/>
+        <!-- 打开removeAbandoned功能 -->
+        <property name="removeAbandoned" value="true"/>
+        <!-- 1800秒，也就是30分钟 -->
+        <property name="removeAbandonedTimeout" value="1800"/>
+        <!-- 关闭abanded连接时输出错误日志 -->
+        <property name="logAbandoned" value="true"/>
+        <!-- 监控数据库 -->
+        <!-- <property name="filters" value="stat" /> -->
+        <property name="filters" value="mergeStat"/>
+    </bean>
+
+</beans>

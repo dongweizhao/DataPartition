@@ -1,0 +1,37 @@
+<assembly xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/assembly-1.0.0.xsd">
+    <id>bin</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <fileSets>
+        <fileSet>
+            <directory>${project.build.outputDirectory}</directory>
+            <outputDirectory>/bin</outputDirectory>
+            <includes>
+                <include>env.app.conf</include>
+                <include>env.conf</include>
+                <include>env.sh</include>
+                <include>restart.sh</include>
+                <include>stop.sh</include>
+                <include>startup.sh</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.build.outputDirectory}</directory>
+            <outputDirectory>/config</outputDirectory>
+            <includes>
+                <include>spring/**</include>
+                <include>logback.xml</include>
+                <include>cfg.properties</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+    <dependencySets>
+        <dependencySet>
+            <useProjectArtifact>true</useProjectArtifact>
+            <outputDirectory>lib</outputDirectory>
+            <scope>runtime</scope>
+        </dependencySet>
+    </dependencySets>
+</assembly>
