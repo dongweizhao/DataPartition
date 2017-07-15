@@ -21,8 +21,8 @@
 + 日期范围 hash 分片
 + 自然月分片
 
-### 使用说明
-1. pom.xml
+### 基于源码使用说明
+1. 配置pom.xml
 ```xml
 <properties>
     <!-- logback相关配置 -->
@@ -45,7 +45,7 @@
     <dyn.separator>|||</dyn.separator>
 </properties>
 ```
-2. beans.xml
+2. 配置beans.xml
  ```xml
  <bean id="gnrParams" class="org.pub.DataPartitoin.util.GnrParams">
     <property name="settings">
@@ -66,3 +66,13 @@
     </property>
 </bean>
  ```
+3. 启动
+
+  调用Startup进行启动
+
+### 基于编译包使用
+1.  执行mvn package 对程序进行打包，获取程序zip包，解压
+
+1. 执行源码使用1、2步
+
+2. 在bin目录下调用startup.sh启动
