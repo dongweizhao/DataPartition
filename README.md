@@ -34,9 +34,9 @@
     <dyn.generate.count>32</dyn.generate.count>
     <!--空值替换符 mysql中为\N-->
     <dyn.nullValue>\N</dyn.nullValue>
-    <dyn.datasource.url>jdbc:oracle:thin:@10.211.55.4:1521:orcl</dyn.datasource.url>
-    <dyn.datasource.username>eadt1</dyn.datasource.username>
-    <dyn.datasource.password>eadt1</dyn.datasource.password>
+    <dyn.datasource.url>jdbc:oracle:thin:@localhost:1521:orcl</dyn.datasource.url>
+    <dyn.datasource.username>test</dyn.datasource.username>
+    <dyn.datasource.password>test</dyn.datasource.password>
     <!--数据库类型-->
     <dyn.dialect>oracle</dyn.dialect>
     <!--每页查询数据大小-->

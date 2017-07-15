@@ -134,9 +134,9 @@
                 <!--<dyn.datasource.password>cap</dyn.datasource.password>-->
                 <!--空值替换符 mysql中为\N-->
                 <dyn.nullValue>\N</dyn.nullValue>
-                <dyn.datasource.url>jdbc:oracle:thin:@10.211.55.4:1521:orcl</dyn.datasource.url>
-                <dyn.datasource.username>eadt1</dyn.datasource.username>
-                <dyn.datasource.password>eadt1</dyn.datasource.password>
+                <dyn.datasource.url>jdbc:oracle:thin:@localhost:1521:orcl</dyn.datasource.url>
+                <dyn.datasource.username>test</dyn.datasource.username>
+                <dyn.datasource.password>test</dyn.datasource.password>
                 <dyn.dialect>oracle</dyn.dialect>
                 <dyn.maxResults>100</dyn.maxResults>
                 <dyn.separator>|||</dyn.separator>
