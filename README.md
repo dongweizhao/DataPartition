@@ -25,6 +25,7 @@
 1. pom.xml
 
   <pre>
+  <code>
     <properties>
                <!-- logback相关配置 -->
                <dyn.logback.home>/Users/dongweizhao/logs</dyn.logback.home>
@@ -48,4 +49,5 @@
                <!--分片文件内容分割符-->
                <dyn.separator>|||</dyn.separator>
            </properties>
+    </code>
   </pre>
