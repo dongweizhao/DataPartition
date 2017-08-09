@@ -1,5 +1,5 @@
 # DataPartition
-基于mycat分片算法，对未分片数据进行分片
+基于mycat分片算法，对未分片数据进行分片,并导入
 ### 适用对象
 使用mycat做为数据库中间件或使用mycat分片算法的应用系统的数据切分需求
 ### 支持数据库
@@ -21,7 +21,7 @@
 + 日期范围 hash 分片
 + 自然月分片
 
-### 基于源码使用说明
+### 初始配置
 1. 配置pom.xml
 ```xml
 <properties>
@@ -33,7 +33,7 @@
     <!--分片数量-->
     <dyn.generate.count>32</dyn.generate.count>
     <!--空值替换符 mysql中为\N-->
-    <dyn.nullValue>\N</dyn.nullValue>
+    <dyn.nullValue>\\N</dyn.nullValue>
     <dyn.datasource.url>jdbc:oracle:thin:@localhost:1521:orcl</dyn.datasource.url>
     <dyn.datasource.username>test</dyn.datasource.username>
     <dyn.datasource.password>test</dyn.datasource.password>
@@ -43,36 +43,26 @@
     <dyn.maxResults>100</dyn.maxResults>
     <!-- 文件内容固定分隔符-->
     <dyn.separator>|||</dyn.separator>
+    <!--需要分片的表,多表已","分割, ps:多表不能换行-->
+    <dyn.tables>t_cap_user_auth_info</dyn.tables>
+    <!--需要分片的表对应的分片键,多表已","分割, ps:多表不能换行-->
+    <dyn.partitonKey>user_id</dyn.partitonKey>
+    <!--需要导入的目标数据库节点-->
+    <dyn.targert.node.datasource>
+        DBS[0]='mysql -h localhost -u cap -pcap cap_1';
+        DBS[1]='mysql -h localhost -u cap -pcap cap_2';
+    </dyn.targert.node.datasource>
 </properties>
 ```
-2. 配置beans.xml
- ```xml
- <bean id="gnrParams" class="org.pub.DataPartitoin.util.GnrParams">
-    <property name="settings">
-        <map>
-            <entry key="maxResults" value="${maxResults}"/>
-            <entry key="path" value="${generatePath}"/>
-            <entry key="separator" value="${separator}"/>
-            <entry key="dialect" value="${dialect}"/>
-            <entry key="dataCount" value="${node.count}"></entry>
-            <entry key="nullValue" value="${dyn.nullValue}"></entry>
-        </map>
-    </property>
-    <property name="tables">
-        <map>
-            <!--添加分片表 key 分片表  value 分片键-->
-            <entry key="eadept" value="deptid"></entry>
-        </map>
-    </property>
-</bean>
- ```
-3. 启动
 
-  调用Startup进行启动
+### 源码启动
+
+  调用Startup进行启动,进行数据分片文件生成
 
 ### 基于编译包使用
 1.  执行mvn package 对程序进行打包，获取程序zip包，解压
 
-1. 执行源码使用1、2步
+2. 在bin目录下调用startup.sh启动,进行数据分片文件生成
 
-2. 在bin目录下调用startup.sh启动
+### 数据导入
+在bin目录下调用import.sh T 进行分片数据导入(import.sh 可以自定义导入具体查看import.sh中注释)

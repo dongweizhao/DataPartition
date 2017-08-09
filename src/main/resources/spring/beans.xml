@@ -2,17 +2,11 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context.xsd
-        http://www.springframework.org/schema/tx
-        http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
-        http://www.springframework.org/schema/aop
-        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+        http://www.springframework.org/schema/context/spring-context.xsd">
 
     <context:component-scan base-package="org.pub.DataPartitoin.*"/>
     <context:property-placeholder location="classpath:cfg.properties"/>
@@ -24,16 +18,11 @@
                 <entry key="separator" value="${separator}"/>
                 <entry key="dialect" value="${dialect}"/>
                 <entry key="dataCount" value="${node.count}"></entry>
-                <entry key="nullValue" value="${dyn.nullValue}"></entry>
+                <entry key="nullValue" value="${nullValue}"></entry>
             </map>
         </property>
-        <property name="tables">
-            <map>
-                <!--<entry key="t_cap_user_auth_info" value="user_id"/>-->
-                <!--<entry key="t_cap_channel_user_stat_info" value="user_id"/>-->
-                <entry key="eadept" value="deptid"></entry>
-            </map>
-        </property>
+        <property name="tablesStr" value="${tables}"/>
+        <property name="partitonKey" value="${partitonKey}"/>
     </bean>
 
     <bean id="ruleAlgorithm" class="io.mycat.route.function.PartitionByMurmurHash" init-method="init">
@@ -62,11 +51,11 @@
         <!-- 初始化连接大小 -->
         <property name="initialSize" value="1"/>
         <!-- 连接池最大使用连接数量 -->
-        <property name="maxActive" value="20"/>
+        <property name="maxActive" value="100"/>
         <!-- 连接池最大空闲 -->
         <property name="maxIdle" value="20"/>
         <!-- 连接池最小空闲 -->
-        <property name="minIdle" value="0"/>
+        <property name="minIdle" value="10"/>
         <!-- 获取连接最大等待时间 -->
         <property name="maxWait" value="300000"/>
         <!--

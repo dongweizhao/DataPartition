@@ -13,16 +13,26 @@
                 <include>env.conf</include>
                 <include>env.sh</include>
                 <include>restart.sh</include>
+                <include>run.sh</include>
                 <include>stop.sh</include>
+                <include>import.sh</include>
+                <include>migrate.sh</include>
+                <include>init.sh</include>
                 <include>startup.sh</include>
+                <include>dump.sh</include>
+                <include>outfile.sh</include>
+                <include>output.sh</include>
+                <include>dataNotice.sh</include>
             </includes>
         </fileSet>
         <fileSet>
             <directory>${project.build.outputDirectory}</directory>
             <outputDirectory>/config</outputDirectory>
             <includes>
+                <include>mybatis/**</include>
                 <include>spring/**</include>
                 <include>logback.xml</include>
+                <include>hsm.ini</include>
                 <include>cfg.properties</include>
             </includes>
         </fileSet>

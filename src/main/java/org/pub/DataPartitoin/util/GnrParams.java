@@ -11,6 +11,8 @@ public class GnrParams {
     private HashMap<String, String> settings;
     private HashMap<String, String> tables;
     private List<String> interceptors;
+    private String tablesStr;
+    private String partitonKey;
     public HashMap<String, String> getSettings() {
         return settings;
     }
@@ -28,10 +30,28 @@ public class GnrParams {
     }
 
     public HashMap<String, String> getTables() {
+        if (tables==null&&tablesStr!=null&&partitonKey!=null){
+            tables=new HashMap<String,String>();
+            String []tableArr=tablesStr.split(",");
+            String []partitonKeyArr=partitonKey.split(",");
+            for (int i=0;i<tableArr.length;i++){
+                tables.put(tableArr[i].trim(),partitonKeyArr[i].trim());
+            }
+        }
         return tables;
     }
 
     public void setTables(HashMap<String, String> tables) {
         this.tables = tables;
+    }
+
+
+    public void setTablesStr(String tablesStr) {
+        this.tablesStr = tablesStr;
+    }
+
+
+    public void setPartitonKey(String partitonKey) {
+        this.partitonKey = partitonKey;
     }
 }
